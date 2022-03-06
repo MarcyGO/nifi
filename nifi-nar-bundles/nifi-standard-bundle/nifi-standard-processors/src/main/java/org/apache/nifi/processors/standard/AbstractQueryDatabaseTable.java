@@ -54,7 +54,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -256,7 +255,7 @@ public abstract class AbstractQueryDatabaseTable extends AbstractDatabaseFetchPr
 
         // Make a mutable copy of the current state property map. This will be updated by the result row callback, and eventually
         // set as the current state map (after the session has been committed)
-        final Map<String, String> statePropertyMap = new LinkedHashMap<>(stateMap.toMap());
+        final Map<String, String> statePropertyMap = new HashMap<>(stateMap.toMap());
 
         //If an initial max value for column(s) has been specified using properties, and this column is not in the state manager, sync them to the state property map
         for (final Map.Entry<String, String> maxProp : maxValueProperties.entrySet()) {
