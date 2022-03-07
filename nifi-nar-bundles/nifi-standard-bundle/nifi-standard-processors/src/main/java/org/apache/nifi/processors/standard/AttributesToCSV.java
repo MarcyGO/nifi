@@ -230,8 +230,6 @@ public class AttributesToCSV extends AbstractProcessor {
         //now glue on the core attributes if the user wants them.
         if(includeCoreAttributes) {
             for (String coreAttribute : coreAttributes) {
-                System.out.println("****************** " + coreAttributes.getClass());
-                System.out.println(coreAttribute);
                 //make sure this coreAttribute is applicable to this flowfile.
                 String val = ff.getAttribute(coreAttribute);
                 if(ffAttributes.containsKey(coreAttribute)) {
@@ -290,9 +288,7 @@ public class AttributesToCSV extends AbstractProcessor {
         }
 
         final Set<String> attributeList = attributeListStringToSet(context.getProperty(ATTRIBUTES_LIST).evaluateAttributeExpressions(original).getValue());
-        System.out.println("****************** attributeList " + attributeList.getClass());
         final Map<String, String> atrList = buildAttributesMapForFlowFile(original, attributeList, pattern);
-        System.out.println("****************** atrList " + atrList.getClass());
 
         //escape attribute values
         int index = 0;
