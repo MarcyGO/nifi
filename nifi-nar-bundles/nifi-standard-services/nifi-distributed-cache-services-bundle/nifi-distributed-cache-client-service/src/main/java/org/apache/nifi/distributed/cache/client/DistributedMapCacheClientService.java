@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -170,7 +171,7 @@ public class DistributedMapCacheClientService extends AbstractControllerService 
     public <K, V> Map<K, V> subMap(Set<K> keys, Serializer<K> keySerializer, Deserializer<V> valueDeserializer) throws IOException {
         Collection<byte[]> bytesKeys = CacheClientSerde.serialize(keys, keySerializer);
         final MapValuesInboundAdapter<K, V> inboundAdapter =
-                new MapValuesInboundAdapter<>(keys, valueDeserializer, new HashMap<>());
+                new MapValuesInboundAdapter<>(keys, valueDeserializer, new LinkedHashMap<>());
         return cacheClient.subMap(bytesKeys, inboundAdapter);
     }
 

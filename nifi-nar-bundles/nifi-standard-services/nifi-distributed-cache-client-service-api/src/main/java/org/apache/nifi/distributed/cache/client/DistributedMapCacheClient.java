@@ -21,7 +21,7 @@ import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.controller.ControllerService;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -157,7 +157,7 @@ public interface DistributedMapCacheClient extends ControllerService {
         if (keys == null) {
             return null;
         }
-        Map<K, V> results = new HashMap<>(keys.size());
+        Map<K, V> results = new LinkedHashMap<>(keys.size());
         for (K key : keys) {
             results.put(key, get(key, keySerializer, valueDeserializer));
         }

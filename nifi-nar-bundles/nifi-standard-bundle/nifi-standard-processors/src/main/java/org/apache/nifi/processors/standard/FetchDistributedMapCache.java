@@ -53,8 +53,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -226,10 +227,12 @@ public class FetchDistributedMapCache extends AbstractProcessor {
             final Map<String, byte[]> cacheValues;
             final boolean singleKey = cacheKeys.size() == 1;
             if (singleKey) {
-                cacheValues = new HashMap<>(1);
+                cacheValues = new LinkedHashMap<>(1);
                 cacheValues.put(cacheKeys.get(0), cache.get(cacheKey, keySerializer, valueDeserializer));
+                System.out.println("****************** single " + cacheValues.getClass());
             } else {
-                cacheValues = cache.subMap(new HashSet<>(cacheKeys), keySerializer, valueDeserializer);
+                cacheValues = cache.subMap(new LinkedHashSet<>(cacheKeys), keySerializer, valueDeserializer);
+                System.out.println("****************** else " + cacheValues.getClass());
             }
             boolean notFound = false;
             for(Map.Entry<String,byte[]> cacheValueEntry : cacheValues.entrySet()) {
