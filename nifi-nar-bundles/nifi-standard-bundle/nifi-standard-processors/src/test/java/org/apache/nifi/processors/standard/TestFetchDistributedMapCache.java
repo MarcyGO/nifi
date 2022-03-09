@@ -196,7 +196,7 @@ public class TestFetchDistributedMapCache {
         runner.setProperty(FetchDistributedMapCache.PROP_PUT_CACHE_VALUE_IN_ATTRIBUTE, "test");
         runner.assertValid();
 
-        final Map<String, String> props = new LinkedHashMap<>();
+        final Map<String, String> props = new HashMap<>();
         runner.enqueue(new byte[]{}, props);
 
         runner.run();
