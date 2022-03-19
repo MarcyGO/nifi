@@ -705,10 +705,18 @@ public class TestAttributesToCSV {
         testRunner.assertTransferCount(AttributesToCSV.REL_SUCCESS, 1);
         testRunner.assertTransferCount(AttributesToCSV.REL_FAILURE, 0);
 
-        testRunner.getFlowFilesForRelationship(AttributesToCSV.REL_SUCCESS)
-                .get(0).assertAttributeEquals("CSVData","Malibu Beach,\"California, US\"");
-        testRunner.getFlowFilesForRelationship(AttributesToCSV.REL_SUCCESS)
-                .get(0).assertAttributeEquals("CSVSchema","beach-name,beach-location");
+        // testRunner.getFlowFilesForRelationship(AttributesToCSV.REL_SUCCESS)
+        //         .get(0).assertAttributeEquals("CSVData","Malibu Beach,\"California, US\"");
+        // testRunner.getFlowFilesForRelationship(AttributesToCSV.REL_SUCCESS)
+        //         .get(0).assertAttributeEquals("CSVSchema","beach-name,beach-location");
+
+        final String[] expected_CSVData = {"Malibu Beach,\"California, US\"","\"California, US\",Malibu Beach"};
+        final String[] expected_CSVSchema = {"beach-name,beach-location","beach-location,beach-name"};
+        int temp1 = testRunner.getFlowFilesForRelationship(AttributesToCSV.REL_SUCCESS)
+                .get(0).assertAttributeEqualsIn("CSVData",expected_CSVData);
+        int temp2 = testRunner.getFlowFilesForRelationship(AttributesToCSV.REL_SUCCESS)
+                .get(0).assertAttributeEqualsIn("CSVSchema",expected_CSVSchema);
+        assertEquals(temp1,temp2);
     }
 
     @Test

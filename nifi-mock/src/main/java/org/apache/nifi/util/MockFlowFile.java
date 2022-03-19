@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -228,6 +229,21 @@ public class MockFlowFile implements FlowFileRecord {
     public void assertAttributeEquals(final String attributeName, final String expectedValue) {
         Assertions.assertEquals(expectedValue, attributes.get(attributeName), "Expected attribute " + attributeName + " to be " +
                 expectedValue + " but instead it was " + attributes.get(attributeName));
+    }
+
+    public int assertAttributeEqualsIn(final String attributeName, final String[] expectedSet) {
+        List<String> list = Arrays.asList(expectedSet);
+        int idx=-1;
+        String expected = "";
+        for (int i=0; i<list.size(); i++){
+            expected = expected + "," + expectedSet[i];
+            if(attributes.get(attributeName)==expectedSet[i]){
+                idx=i;
+            }
+        }
+        Assertions.assertTrue(list.contains(attributes.get(attributeName)), "Expected attribute " + attributeName + " to be one of" +
+                expected + " but instead it was " + attributes.get(attributeName));
+        return idx;
     }
 
     public void assertAttributeNotEquals(final String attributeName, final String expectedValue) {
