@@ -39,6 +39,7 @@ import org.apache.nifi.controller.repository.claim.ContentClaim;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.flowfile.attributes.CoreAttributes;
 import org.junit.jupiter.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MockFlowFile implements FlowFileRecord {
 
@@ -228,6 +229,27 @@ public class MockFlowFile implements FlowFileRecord {
     public void assertAttributeEquals(final String attributeName, final String expectedValue) {
         Assertions.assertEquals(expectedValue, attributes.get(attributeName), "Expected attribute " + attributeName + " to be " +
                 expectedValue + " but instead it was " + attributes.get(attributeName));
+    }
+
+    public void assertAttributesEqualsInAnyOrder(final String[] attributeName, final String[] expectedValue) {
+        int attribute_num = attributeName.length;
+        int attribute_length = expectedValue[0].split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1).length;
+        String[][] expected = new String[attribute_num][attribute_length];
+        String[][] actual= new String[attribute_num][attribute_length];
+        for(int i=0; i<attribute_num; i++){
+            expected[i] = expectedValue[i].split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+            actual[i] = attributes.get(attributeName[i]).split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+            assertThat(actual[i]).containsExactlyInAnyOrder(expected[i]);
+        }
+        for(int i=0; i<attribute_length; i++){
+            for(int j=0; j<attribute_length; j++){
+                if(actual[0][i].equals(expected[0][j])){
+                    for(int u=0; u<attribute_num; u++){
+                        Assertions.assertEquals(actual[u][i], expected[u][j]);
+                    }
+                }    
+            }
+        }
     }
 
     public void assertAttributeNotEquals(final String attributeName, final String expectedValue) {
