@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
@@ -740,8 +741,34 @@ public class TestAttributesToCSV {
         final byte[] contentData = testRunner.getContentAsByteArray(flowFile);
 
         final String contentDataString = new String(contentData, "UTF-8");
-        assertEquals(contentDataString.split(newline)[0], "beach-name,beach-location");
-        assertEquals(contentDataString.split(newline)[1], "Malibu Beach,\"California, US\"");
+
+        List<String> expected_0 = new ArrayList<>();
+        List<String> expected_1 = new ArrayList<>();
+        expected_0.add("beach-name,beach-location");
+        expected_0.add("beach-location,beach-name");
+        expected_1.add("Malibu Beach,\"California, US\"");
+        expected_1.add("\"California, US\",Malibu Beach");
+        int idx_0=-1;
+        int idx_1=-1;
+        String actual_0 = contentDataString.split(newline)[0];
+        String actual_1 = contentDataString.split(newline)[1];
+        if(actual_0.equals(expected_0.get(0))){
+            idx_0=0;
+        }
+        else if(actual_0.equals(expected_0.get(1))){
+            idx_0=1;
+        }
+        if(actual_1.equals(expected_1.get(0))){
+            idx_1=0;
+        }
+        else if(actual_1.equals(expected_1.get(1))){
+            idx_1=1;
+        }
+        assertTrue("Expected one of " + expected_0.get(0) + ", " +
+                expected_0.get(1) + " but instead it was " + actual_0 + idx_0, idx_0!=-1);
+        assertTrue("Expected one of " + expected_1.get(0) + ", " +
+                expected_1.get(1) + " but instead it was " + actual_1, idx_1!=-1);
+        assertTrue(idx_0==idx_1);
     }
 
 
