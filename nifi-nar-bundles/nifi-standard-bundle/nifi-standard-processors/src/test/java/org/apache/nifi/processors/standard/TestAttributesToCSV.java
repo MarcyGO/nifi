@@ -706,7 +706,7 @@ public class TestAttributesToCSV {
         testRunner.assertTransferCount(AttributesToCSV.REL_SUCCESS, 1);
         testRunner.assertTransferCount(AttributesToCSV.REL_FAILURE, 0);
         testRunner.getFlowFilesForRelationship(AttributesToCSV.REL_SUCCESS)
-                 .get(0).assertAttributesEqualsInAnyOrder(new String[]{"CSVData","CSVSchema"},new String[]{"Malibu Beach,\"California, US\"","beach-name,beach-location"});
+                .get(0).assertAttributesEqualsInAnyOrder(new String[]{"CSVData","CSVSchema"},new String[]{"Malibu Beach,\"California, US\"","beach-name,beach-location"});
     }
 
     @Test
