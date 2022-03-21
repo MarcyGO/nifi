@@ -349,6 +349,16 @@ public class MockFlowFile implements FlowFileRecord {
         }
     }
 
+    public void assertContentJSONEquals(final Path path) throws IOException {
+        String expected = new String(Files.readAllBytes(path));
+        String actual = this.getContent();
+        try{
+            JSONAssert.assertEquals(expected, actual, false);
+        } catch (JSONException jse) {
+            Assertions.fail("Not comparing JSON strings.");
+        }
+    }
+
     /**
      * @return a copy of the the contents of the FlowFile as a byte array
      */
