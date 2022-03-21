@@ -745,11 +745,11 @@ public class TestAttributesToCSV {
         String[] actualParts_1 = contentDataString.split(newline)[1].split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
         String[] expectedParts_1 = {"Malibu Beach","\"California, US\""};
         assertThat(actualParts_1).containsExactlyInAnyOrder(expectedParts_1);
-        for(int i=0; i<2; i++){
-            for(int j=0; j<2; j++){
-                if(actualParts_0[i].equals(expectedParts_0[j])){
+        for (int i=0; i<2; i++){
+            for (int j=0; j<2; j++){
+                if (actualParts_0[i].equals(expectedParts_0[j])){
                     assertEquals(actualParts_1[i], expectedParts_1[j]);
-                }    
+                }
             }
         }
     }
@@ -828,11 +828,11 @@ public class TestAttributesToCSV {
         String[] actualParts_1 = contentDataString.split(newline)[1].split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
         String[] expectedParts_1 = {"Malibu Beach","\"California, US\"", path, filename, uuid};
         assertThat(actualParts_1).containsExactlyInAnyOrder(expectedParts_1);
-        for(int i=0; i<2; i++){
-            for(int j=0; j<2; j++){
-                if(actualParts_0[i].equals(expectedParts_0[j])){
+        for (int i=0; i<2; i++){
+            for (int j=0; j<2; j++){
+                if (actualParts_0[i].equals(expectedParts_0[j])){
                     assertEquals(actualParts_1[i], expectedParts_1[j]);
-                }    
+                }
             }
         }
     }
