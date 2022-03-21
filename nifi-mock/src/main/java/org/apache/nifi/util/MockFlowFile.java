@@ -33,6 +33,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import org.json.JSONException;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.nifi.controller.repository.FlowFileRecord;
 import org.apache.nifi.controller.repository.claim.ContentClaim;
@@ -229,6 +231,15 @@ public class MockFlowFile implements FlowFileRecord {
     public void assertAttributeEquals(final String attributeName, final String expectedValue) {
         Assertions.assertEquals(expectedValue, attributes.get(attributeName), "Expected attribute " + attributeName + " to be " +
                 expectedValue + " but instead it was " + attributes.get(attributeName));
+    }
+
+    public void assertAttributeJSONEquals(final String attributeName, final String expectedValue) {
+        try{
+            JSONAssert.assertEquals(expectedValue, attributes.get(attributeName), false);
+        } catch (JSONException jse) {
+            Assertions.fail("Not comparing JSON strings.");
+        }
+        
     }
 
     public void assertAttributesEqualsInAnyOrder(final String[] attributeName, final String[] expectedValue) {
