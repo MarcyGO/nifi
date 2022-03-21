@@ -247,7 +247,7 @@ public class MockFlowFile implements FlowFileRecord {
                     for(int u=0; u<attribute_num; u++){
                         Assertions.assertEquals(actual[u][i], expected[u][j]);
                     }
-                }    
+                }
             }
         }
     }
