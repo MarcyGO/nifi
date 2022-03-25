@@ -31,6 +31,8 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -811,11 +813,17 @@ public class TestAttributesToCSV {
         final byte[] contentData = testRunner.getContentAsByteArray(flowFile);
 
         final String contentDataString = new String(contentData, "UTF-8");
-        assertEquals(contentDataString.split(newline)[0], "beach-name,beach-location,path,filename,uuid");
-        assertEquals(contentDataString.split(newline)[1], "Malibu Beach,\"California, US\"," + path + "," + filename + "," + uuid);
+        List<String> actual0 = getStrings(contentDataString.split(newline)[0]);
+        List<String> actual1 = getStrings(contentDataString.split(newline)[1]);
+        List<String> expected0 = getStrings("beach-name,beach-location,path,filename,uuid");
+        List<String> expected1 = getStrings("Malibu Beach,\"California, US\"," + path + "," + filename + "," + uuid);
+        assertEquals(zipToMap(expected0, expected1), zipToMap(actual0, actual1));
     }
     private List<String> getStrings(String sdata) {
         return Arrays.asList(Pattern.compile(SPLIT_REGEX).split(sdata));
+    }
+    private <K, V> Map<K, V> zipToMap(List<K> keys, List<V> values) {
+        return IntStream.range(0, keys.size()).boxed().collect(Collectors.toMap(keys::get, values::get));
     }
 
 }
