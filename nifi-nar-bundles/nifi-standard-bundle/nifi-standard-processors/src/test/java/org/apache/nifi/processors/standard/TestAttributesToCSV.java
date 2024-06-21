@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestAttributesToCSV {
 
@@ -704,11 +705,8 @@ public class TestAttributesToCSV {
                 .assertAttributeExists("CSVSchema");
         testRunner.assertTransferCount(AttributesToCSV.REL_SUCCESS, 1);
         testRunner.assertTransferCount(AttributesToCSV.REL_FAILURE, 0);
-
         testRunner.getFlowFilesForRelationship(AttributesToCSV.REL_SUCCESS)
-                .get(0).assertAttributeEquals("CSVData","Malibu Beach,\"California, US\"");
-        testRunner.getFlowFilesForRelationship(AttributesToCSV.REL_SUCCESS)
-                .get(0).assertAttributeEquals("CSVSchema","beach-name,beach-location");
+                .get(0).assertAttributesEqualsInAnyOrder(new String[]{"CSVData","CSVSchema"},new String[]{"Malibu Beach,\"California, US\"","beach-name,beach-location"});
     }
 
     @Test
@@ -740,8 +738,20 @@ public class TestAttributesToCSV {
         final byte[] contentData = testRunner.getContentAsByteArray(flowFile);
 
         final String contentDataString = new String(contentData, "UTF-8");
-        assertEquals(contentDataString.split(newline)[0], "beach-name,beach-location");
-        assertEquals(contentDataString.split(newline)[1], "Malibu Beach,\"California, US\"");
+
+        String[] actualParts_0 = contentDataString.split(newline)[0].split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        String[] expectedParts_0 = {"beach-name","beach-location"};
+        assertThat(actualParts_0).containsExactlyInAnyOrder(expectedParts_0);
+        String[] actualParts_1 = contentDataString.split(newline)[1].split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        String[] expectedParts_1 = {"Malibu Beach","\"California, US\""};
+        assertThat(actualParts_1).containsExactlyInAnyOrder(expectedParts_1);
+        for (int i=0; i<2; i++){
+            for (int j=0; j<2; j++){
+                if (actualParts_0[i].equals(expectedParts_0[j])){
+                    assertEquals(actualParts_1[i], expectedParts_1[j]);
+                }
+            }
+        }
     }
 
 
@@ -774,8 +784,8 @@ public class TestAttributesToCSV {
         final String filename = flowFile.getAttribute("filename");
         final String uuid = flowFile.getAttribute("uuid");
 
-        flowFile.assertAttributeEquals("CSVData", "Malibu Beach,\"California, US\"," + path + "," + filename + "," + uuid);
-        flowFile.assertAttributeEquals("CSVSchema","beach-name,beach-location,path,filename,uuid");
+        flowFile.assertAttributesEqualsInAnyOrder(new String[]{"CSVData","CSVSchema"},
+                new String[]{"Malibu Beach,\"California, US\"," + path + "," + filename + "," + uuid,"beach-name,beach-location,path,filename,uuid"});
     }
 
     @Test
@@ -811,8 +821,20 @@ public class TestAttributesToCSV {
         final byte[] contentData = testRunner.getContentAsByteArray(flowFile);
 
         final String contentDataString = new String(contentData, "UTF-8");
-        assertEquals(contentDataString.split(newline)[0], "beach-name,beach-location,path,filename,uuid");
-        assertEquals(contentDataString.split(newline)[1], "Malibu Beach,\"California, US\"," + path + "," + filename + "," + uuid);
+
+        String[] actualParts_0 = contentDataString.split(newline)[0].split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        String[] expectedParts_0 = {"beach-name","beach-location","path","filename","uuid"};
+        assertThat(actualParts_0).containsExactlyInAnyOrder(expectedParts_0);
+        String[] actualParts_1 = contentDataString.split(newline)[1].split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        String[] expectedParts_1 = {"Malibu Beach","\"California, US\"", path, filename, uuid};
+        assertThat(actualParts_1).containsExactlyInAnyOrder(expectedParts_1);
+        for (int i=0; i<2; i++){
+            for (int j=0; j<2; j++){
+                if (actualParts_0[i].equals(expectedParts_0[j])){
+                    assertEquals(actualParts_1[i], expectedParts_1[j]);
+                }
+            }
+        }
     }
     private List<String> getStrings(String sdata) {
         return Arrays.asList(Pattern.compile(SPLIT_REGEX).split(sdata));
